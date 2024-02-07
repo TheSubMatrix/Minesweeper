@@ -78,6 +78,7 @@ public class Tile : MonoBehaviour
                 }
                 CurrentState = (tileState)foundNeighboringBombs;
                 board.tilesNeededToClear--;
+                board.OnBoardSquaresUpdated?.Invoke(board.tilesNeededToClear);
                 board.CheckWin();
                 if(CurrentState == tileState.Empty)
                 {
@@ -97,7 +98,6 @@ public class Tile : MonoBehaviour
             }
         }
     }
-
     public void OnMouseOver()
     {
         if (Input.GetMouseButtonDown(0) && CurrentState == tileState.Covered)
@@ -116,7 +116,6 @@ public class Tile : MonoBehaviour
             }
         }
     }
-
     void OnGameLost()
     {
         if(isBomb && (CurrentState == tileState.Covered || CurrentState == tileState.Flag))
