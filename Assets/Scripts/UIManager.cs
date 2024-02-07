@@ -9,14 +9,20 @@ public class UIManager : MonoBehaviour
     [SerializeField] CanvasGroup gameHUD;
     [SerializeField] TMP_Text winLoseText;
     [SerializeField] TMP_Text finalTimeText;
+    [SerializeField] TMP_Text remainingSpaceToClearText;
 
+    string remainingSpacesToClearTextInitialString;
     string finalTimeTextInitialString;
     string timerTextInitialString;
     float timePassed = 0f;
     bool timerRunning = true;
 
-    void Start()
+    void Awake()
     {
+        if(remainingSpaceToClearText != null)
+        {
+            remainingSpacesToClearTextInitialString = remainingSpaceToClearText.text;
+        }
         if(timerText != null)
         {
             timerTextInitialString = timerText.text;
@@ -33,6 +39,7 @@ public class UIManager : MonoBehaviour
             board.OnGameLost += LoseScreen;
             board.OnGameWon += StopTimer;
             board.OnGameWon += WinScreen;
+            board.OnBoardSquaresUpdated += OnBoardUpdated;
         }
     }
     void Update()
@@ -44,7 +51,6 @@ public class UIManager : MonoBehaviour
             timerText.text = timerTextInitialString + CreateTimerString(timePassed);
         }
     }
-
     public void StopTimer()
     {
         timerRunning = false;
@@ -99,5 +105,12 @@ public class UIManager : MonoBehaviour
         gameHUD.interactable = false;
         gameFinishedCanvasGroup.alpha = 1f;
         gameFinishedCanvasGroup.interactable = true;
+    }
+    void OnBoardUpdated(uint remainingBombs)
+    {
+        if(remainingSpaceToClearText != null)
+        {
+            remainingSpaceToClearText.text = remainingSpacesToClearTextInitialString + remainingBombs;
+        }
     }
 }

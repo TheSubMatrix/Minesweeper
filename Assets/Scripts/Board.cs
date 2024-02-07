@@ -7,6 +7,8 @@ public class Board : MonoBehaviour
     public GameWon OnGameWon;
     public delegate void GameLost();
     public GameLost OnGameLost;
+    public delegate void BoardSquaresUpdated(uint remainingSquares);
+    public BoardSquaresUpdated OnBoardSquaresUpdated;
 
     [SerializeField] private Grid grid;
     [SerializeField] const uint gridSizeX = 15;
@@ -29,6 +31,10 @@ public class Board : MonoBehaviour
             gameObject.transform.position = new Vector2(-(grid.cellSize.x * gridSizeX / 2), -(grid.cellSize.y * gridSizeY / 2));
             FillGrid(gridSizeX, gridSizeY);
         }
+    }
+    private void Start()
+    {
+        OnBoardSquaresUpdated?.Invoke(tilesNeededToClear);
     }
     void FillGrid(uint width, uint height)
     {
